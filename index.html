@@ -2,11 +2,11 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=3.0, maximum-scale=3.0, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
   <title>Group 3 👑</title>
   <style>
     html {
-      font-size: 28px;
+      font-size: 16px;
     }
 
     body {
@@ -18,17 +18,26 @@
 
     h2 {
       text-align: center;
-      font-size: 1.4em;
+      font-size: 1.3em;
     }
 
-    button, input, textarea {
+    #loginArea {
+      max-width: 400px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: #fff0f5;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    #loginArea input,
+    #loginArea button {
+      width: 100%;
       font-size: 1em;
-      padding: 1em;
-      border-radius: 0.5em;
+      padding: 0.6em 1em;
+      margin: 10px 0;
+      border-radius: 8px;
       border: 1px solid #ccc;
-      width: 90%;
-      margin: 10px auto;
-      display: block;
     }
 
     .role-btn {
@@ -51,41 +60,135 @@
       text-align: center;
     }
 
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 20px;
+      background: linear-gradient(to right, #fde4f2, #d6e4f9);
+      flex-wrap: wrap;
+    }
+
+    .logo {
+      font-weight: bold;
+      font-size: 1.1em;
+    }
+
+    .search-menu {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .search-box {
+      position: relative;
+    }
+
+    .search-box input {
+      padding: 8px 12px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      width: 180px;
+      background-color: #b6f7b0;
+      font-size: 1em;
+      outline: none;
+    }
+
+    .suggestions {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      background: white;
+      border: 1px solid #ccc;
+      width: 100%;
+      z-index: 10;
+      display: none;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+
+    .suggestions div {
+      padding: 8px;
+      cursor: pointer;
+      border-bottom: 1px solid #eee;
+      background-color: #f9f9f9;
+      transition: background 0.3s;
+    }
+
+    .suggestions div:hover {
+      background-color: #d0f0c0;
+    }
+
+    .menu-toggle {
+      font-size: 24px;
+      cursor: pointer;
+      padding: 6px 12px;
+      background-color: #fcb1d1;
+      border-radius: 8px;
+      color: white;
+      font-weight: bold;
+    }
+
+    .menu-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.4);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 999;
+    }
+
+    .menu-panel {
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      width: 80%;
+      max-width: 300px;
+    }
+
+    .menu-panel button {
+      padding: 10px;
+      font-size: 1em;
+      border: none;
+      border-radius: 8px;
+      background-color: #fcb1d1;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .menu-panel button:hover {
+      background-color: #f88fb0;
+    }
+
     .section {
       display: none;
+      padding: 15px;
     }
 
     .section.active {
       display: block;
     }
 
-    .menu button {
-      margin: 5px;
-      padding: 10px 20px;
-      border: none;
-      border-radius: 12px;
-      background-color: #fcb1d1;
-      color: white;
-      cursor: pointer;
-      font-weight: bold;
-    }
-
-    .menu button:hover {
-      background-color: #f88fb0;
-    }
-
     .admin-tools input,
     .admin-tools textarea {
       display: block;
       margin: 5px auto;
-      padding: 8px;
+      padding: 6px;
       width: 90%;
       border-radius: 8px;
       border: 1px solid #ccc;
     }
 
     .admin-tools button {
-      padding: 8px 16px;
+      padding: 6px 12px;
       border: none;
       border-radius: 8px;
       background: #a1c4fd;
@@ -97,7 +200,7 @@
     .image-item {
       background: #fff;
       margin: 5px auto;
-      padding: 10px;
+      padding: 8px;
       width: 90%;
       border-radius: 8px;
       cursor: pointer;
@@ -132,7 +235,6 @@
   </style>
 </head>
 <body>
-
   <!-- Đăng nhập -->
   <div id="loginArea">
     <h2>Đăng nhập hệ thống nhóm 3 👑</h2>
@@ -157,26 +259,29 @@
   <div id="mainContent" style="display:none;">
     <div class="header">
       <div class="logo">Group 3 👑</div>
-      <div class="search-box">
-        <input type="text" id="searchInput" placeholder="Tìm kiếm...">
-        <div class="suggestions" id="suggestionsBox"></div>
+      <div class="search-menu">
+        <div class="search-box">
+          <input type="text" id="searchInput" placeholder="Tìm kiếm...">
+          <div class="suggestions" id="suggestionsBox"></div>
+        </div>
+        <div class="menu-toggle" onclick="toggleMenu()">☰</div>
       </div>
-      <div class="menu-toggle" onclick="toggleMenu()">☰</div>
     </div>
 
-    <div class="divider"></div>
-
-    <div class="menu" id="menuBar">
-      <button onclick="showSection('home')">Trang Chủ</button>
-      <button onclick="showSection('notice')">Thông Báo-Trả Bài-Soạn Bài</button>
-      <button onclick="showSection('schedule')">Thời Khoá Biểu</button>
-      <button onclick="showSection('study')">Thời Gian Học</button>
-      <button onclick="showSection('account')">Tài Khoản</button>
+    <!-- Menu dọc khi nhấn ☰ -->
+    <div class="menu-overlay" id="menuOverlay">
+      <div class="menu-panel">
+        <button onclick="showSection('home'); toggleMenu()">Trang Chủ</button>
+        <button onclick="showSection('notice'); toggleMenu()">Thông Báo-Trả Bài-Soạn Bài</button>
+        <button onclick="showSection('schedule'); toggleMenu()">Thời Khoá Biểu</button>
+        <button onclick="showSection('study'); toggleMenu()">Thời Gian Học</button>
+        <button onclick="showSection('account'); toggleMenu()">Tài Khoản</button>
+      </div>
     </div>
 
     <div id="home" class="section active">
       <h2>Trang Chủ</h2>
-      <p>Chào mừng đến với website của nhóm 3! 👑.Mình là Tuấn Anh là người tạo ra Wed này mục đích để câp nhật thông tin như Trả bài và Soạn bài.Lưu ý: mình chỉ đưa thông tin chính thầy/cô đã dặn trả bài nhé, mình không đưa Trả Bài do mọi người đồn hoặc đoán mò nhé . Wed chỉ mới làm tầm 5 ngày thôi nên sẽ có một số lỗi cớ bản và không có nhiều chức năng .Nếu mốt mình có thêm nhiều thời gian mình sẽ cập nhật thêm nhiều chức năng khác nhé!!!!</p>
+      <p>Chào mừng đến với website của nhóm 3! 👑 Mình là Tuấn Anh...</p>
     </div>
 
     <div id="notice" class="section">
@@ -219,6 +324,7 @@
     <img id="overlayImg" src="">
   </div>
 
+  <!-- JavaScript -->
   <script>
     const members = [
       "hồ hải đăng", "huệ", "mỹ linh", "như quỳnh",
@@ -240,7 +346,7 @@
       }
     }
 
-        function loginAdmin() {
+    function loginAdmin() {
       const name = document.getElementById("adminName").value.trim().toLowerCase();
       const pass = document.getElementById("adminPass").value;
       if (name === "tuấn anh" && pass === "!zxcvbnm..") {
@@ -255,8 +361,8 @@
     }
 
     function toggleMenu() {
-      const menu = document.getElementById("menuBar");
-      menu.style.display = menu.style.display === "none" ? "block" : "none";
+      const overlay = document.getElementById("menuOverlay");
+      overlay.style.display = overlay.style.display === "flex" ? "none" : "flex";
     }
 
     function showSection(id) {
@@ -323,7 +429,7 @@
       imgs.forEach((src, index) => {
         const img = document.createElement("img");
         img.src = src;
-        img.style.maxWidth = "300px";
+                img.style.maxWidth = "300px";
         img.style.margin = "10px";
         img.className = "image-item";
         img.onclick = () => {
@@ -376,6 +482,53 @@
       });
     }
 
+    // 🔍 Gợi ý tìm kiếm và chuyển mục
+    const searchInput = document.getElementById("searchInput");
+    const suggestionsBox = document.getElementById("suggestionsBox");
+
+    const sections = [
+      { name: "Trang Chủ", id: "home" },
+      { name: "Thông Báo-Trả Bài-Soạn Bài", id: "notice" },
+      { name: "Thời Khoá Biểu", id: "schedule" },
+      { name: "Thời Gian Học", id: "study" },
+      { name: "Tài Khoản", id: "account" }
+    ];
+
+    searchInput.addEventListener("input", () => {
+      const value = searchInput.value.toLowerCase();
+      suggestionsBox.innerHTML = "";
+
+      if (value.length === 0) {
+        suggestionsBox.style.display = "none";
+        return;
+      }
+
+      const filtered = sections.filter(s => s.name.toLowerCase().includes(value));
+      if (filtered.length === 0) {
+        suggestionsBox.style.display = "none";
+        return;
+      }
+
+      filtered.forEach(s => {
+        const div = document.createElement("div");
+        div.textContent = s.name;
+        div.onclick = () => {
+          showSection(s.id);
+          suggestionsBox.style.display = "none";
+          searchInput.value = "";
+        };
+        suggestionsBox.appendChild(div);
+      });
+
+      suggestionsBox.style.display = "block";
+    });
+
+    document.addEventListener("click", (e) => {
+      if (!searchInput.contains(e.target) && !suggestionsBox.contains(e.target)) {
+        suggestionsBox.style.display = "none";
+      }
+    });
+
     window.onload = function() {
       localStorage.removeItem("role");
       localStorage.removeItem("username");
@@ -383,3 +536,5 @@
       document.getElementById("mainContent").style.display = "none";
     };
   </script>
+</body>
+</html>
